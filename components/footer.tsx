@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { SiDiscord, SiGithub, SiTwitter } from 'react-icons/si'
+import { SiFarcaster, SiGithub, SiTwitter } from 'react-icons/si'
 import { Button } from './ui/button'
 
 const Footer: React.FC = () => {
@@ -12,8 +12,8 @@ const Footer: React.FC = () => {
           size={'icon'}
           className="text-muted-foreground/50"
         >
-          <Link href="https://discord.gg/zRxaseCuGq" target="_blank">
-            <SiDiscord size={18} />
+          <Link href="https://warpcast.com/~/channel/lux" target="_blank">
+            <SiFarcaster size={18} />
           </Link>
         </Button>
         <Button
@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
           size={'icon'}
           className="text-muted-foreground/50"
         >
-          <Link href="https://twitter.com/morphic_ai" target="_blank">
+          <Link href="https://twitter.com/luxdefi" target="_blank">
             <SiTwitter size={18} />
           </Link>
         </Button>
@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
           size={'icon'}
           className="text-muted-foreground/50"
         >
-          <Link href="https://git.new/morphic" target="_blank">
+          <Link href="https://git.new/luxfi" target="_blank">
             <SiGithub size={18} />
           </Link>
         </Button>

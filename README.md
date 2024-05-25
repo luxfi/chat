@@ -1,4 +1,4 @@
-# Morphic
+# Lux
 
 An AI-powered search engine with a generative UI.
 
@@ -6,7 +6,7 @@ An AI-powered search engine with a generative UI.
 
 ### Note
 
-Please note that there are differences between this repository and the official website [morphic.sh](morphic.sh). The official website is a fork of this repository with additional features such as authentication, which are necessary for providing the service online. The core source code of Morphic resides in this repository, and it's designed to be easily built and deployed. When using Morphic, please keep in mind the different roles of the repository and the website.
+Please note that there are differences between this repository and the official website [chat.sh](chat.sh). The official website is a fork of this repository with additional features such as authentication, which are necessary for providing the service online. The core source code of Lux resides in this repository, and it's designed to be easily built and deployed. When using Lux, please keep in mind the different roles of the repository and the website.
 
 ## 🔍 Overview
 
@@ -43,13 +43,13 @@ Please note that there are differences between this repository and the official 
 Fork the repo to your Github account, then run the following command to clone the repo:
 
 ```
-git clone git@github.com:[YOUR_GITHUB_ACCOUNT]/morphic.git
+git clone git@github.com:[YOUR_GITHUB_ACCOUNT]/chat.git
 ```
 
 ### 2. Install dependencies
 
 ```
-cd morphic
+cd chat
 bun install
 ```
 
@@ -89,23 +89,23 @@ You can now visit http://localhost:3000.
 
 ## 🌐 Deploy
 
-Host your own live version of Morphic with Vercel or Cloudflare Pages.
+Host your own live version of Lux with Vercel or Cloudflare Pages.
 
 ### Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmiurla%2Fmorphic&env=OPENAI_API_KEY,TAVILY_API_KEY,UPSTASH_REDIS_REST_URL,UPSTASH_REDIS_REST_TOKEN)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fluxfi%2Fchat&env=OPENAI_API_KEY,TAVILY_API_KEY,UPSTASH_REDIS_REST_URL,UPSTASH_REDIS_REST_TOKEN)
 
 ### Cloudflare Pages
 
 1. Fork the repo to your GitHub.
 2. Create a Cloudflare Pages project.
-3. Select `Morphic` repo and `Next.js` preset.
+3. Select `Lux` repo and `Next.js` preset.
 4. Set `OPENAI_API_KEY` and `TAVILY_API_KEY` env vars.
 5. Save and deploy.
 6. Cancel deployment, go to `Settings` -> `Functions` -> `Compatibility flags`, add `nodejs_compat` to preview and production.
 7. Redeploy.
 
-**The build error needs to be fixed: [issue](https://github.com/miurla/morphic/issues/114)**
+**The build error needs to be fixed: [issue](https://github.com/luxfi/chat/issues/114)**
 
 ## ✅ Verified models
 

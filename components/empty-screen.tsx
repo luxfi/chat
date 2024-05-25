@@ -3,20 +3,20 @@ import { ArrowRight } from 'lucide-react'
 
 const exampleMessages = [
   {
-    heading: "What's new with the iPad Pro?",
-    message: "What's new with the iPad Pro?"
+    heading: "What's new with Lux?",
+    message: "What's new with Lux?"
   },
   {
-    heading: 'Why is Nvidia growing rapidly?',
-    message: 'Why is Nvidia growing rapidly?'
+    heading: 'Why is Lux growing rapidly?',
+    message: 'Why is Lux growing rapidly?'
   },
   {
-    heading: 'How does the Vercel AI SDK work?',
-    message: 'How does the Vercel AI SDK work?'
+    heading: 'How does the Lux SDK work?',
+    message: 'How does the Lux SDK work?'
   },
   {
-    heading: 'Tesla vs Rivian',
-    message: 'Tesla vs Rivian'
+    heading: 'Lux vs other blockchains',
+    message: 'Lux vs other blockchains'
   }
 ]
 export function EmptyScreen({
