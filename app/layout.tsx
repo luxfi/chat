@@ -3,9 +3,7 @@ import { Inter as FontSans } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { ThemeProvider } from '@/components/theme-provider'
-import Header from '@/components/header'
-import Footer from '@/components/footer'
-import { Sidebar } from '@/components/sidebar'
+import DynamicLayout from '@/components/dynamic-layout';
 import { Toaster } from '@/components/ui/sonner'
 
 const fontSans = FontSans({
@@ -54,10 +52,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          {children}
-          <Sidebar />
-          <Footer />
+          <DynamicLayout>
+            {children}
+          </DynamicLayout>
           <Toaster />
         </ThemeProvider>
       </body>

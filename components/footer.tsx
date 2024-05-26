@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
           size={'icon'}
           className="text-muted-foreground/50"
         >
-          <Link href="https://git.new/luxfi" target="_blank">
+          <Link href="https://github.com/luxfi" target="_blank">
             <SiGithub size={18} />
           </Link>
         </Button>
