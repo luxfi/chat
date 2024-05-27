@@ -6,7 +6,8 @@ An AI-powered search engine with a generative UI.
 
 ### Note
 
-Please note that there are differences between this repository and the official website [chat.sh](chat.sh). The official website is a fork of this repository with additional features such as authentication, which are necessary for providing the service online. The core source code of Lux resides in this repository, and it's designed to be easily built and deployed. When using Lux, please keep in mind the different roles of the repository and the website.
+Please note that there are differences between this repository and the official
+website [lux.chat](lux.chath). The official website is a fork of this repository with additional features such as authentication, which are necessary for providing the service online. The core source code of Lux resides in this repository, and it's designed to be easily built and deployed. When using Lux, please keep in mind the different roles of the repository and the website.
 
 ## 🔍 Overview
 
@@ -99,7 +100,7 @@ Host your own live version of Lux with Vercel or Cloudflare Pages.
 
 1. Fork the repo to your GitHub.
 2. Create a Cloudflare Pages project.
-3. Select `Lux` repo and `Next.js` preset.
+3. Select `chat` repo and `Next.js` preset.
 4. Set `OPENAI_API_KEY` and `TAVILY_API_KEY` env vars.
 5. Save and deploy.
 6. Cancel deployment, go to `Settings` -> `Functions` -> `Compatibility flags`, add `nodejs_compat` to preview and production.
