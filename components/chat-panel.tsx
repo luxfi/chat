@@ -25,7 +25,6 @@ export function ChatPanel({ messages }: ChatPanelProps) {
   const router = useRouter()
   const [isIframe, setIsIframe] = useState(false)
 
-  const searchParam = useSearchParams()
   useEffect(() => {
     if (window.location.pathname === '/iframe') {
       setIsIframe(true)
