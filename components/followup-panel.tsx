@@ -5,7 +5,7 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { useActions, useUIState } from 'ai/rsc'
 import type { AI } from '@/app/actions'
-import { UserMessage } from './user-message'
+import { UserMessage } from './message/user-message'
 import { ArrowRight } from 'lucide-react'
 
 export function FollowupPanel() {

@@ -1,7 +1,7 @@
 'use client'
 
 import { StreamableValue, useStreamableValue } from 'ai/rsc'
-import { MemoizedReactMarkdown } from './ui/markdown'
+import { MemoizedReactMarkdown } from '../ui/markdown'
 import rehypeExternalLinks from 'rehype-external-links'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'

@@ -3,8 +3,8 @@
 import { SearchResults } from './search-results'
 import { SearchSkeleton } from './search-skeleton'
 import { SearchResultsImageSection } from './search-results-image'
-import { Section } from './section'
-import { ToolBadge } from './tool-badge'
+import { Section } from '../section/section'
+import { ToolBadge } from '../tool-badge'
 import type { SearchResults as TypeSearchResults } from '@/lib/types'
 import { StreamableValue, useStreamableValue } from 'ai/rsc'
 

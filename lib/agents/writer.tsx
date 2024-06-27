@@ -1,7 +1,7 @@
 import { createStreamableUI, createStreamableValue } from 'ai/rsc'
 import { CoreMessage, streamText as nonexperimental_streamText } from 'ai'
-import { Section } from '@/components/section'
-import { BotMessage } from '@/components/message'
+import { Section } from '@/components/section/section'
+import { BotMessage } from '@/components/message/message'
 import { OpenAI } from '@ai-sdk/openai'
 import preprompt from './lux'
 

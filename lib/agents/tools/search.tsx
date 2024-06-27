@@ -2,7 +2,7 @@ import { createStreamableValue } from 'ai/rsc'
 import Exa from 'exa-js'
 import { searchSchema } from '@/lib/schema/search'
 import { Card } from '@/components/ui/card'
-import { SearchSection } from '@/components/search-section'
+import { SearchSection } from '@/components/search/search-section'
 import { ToolProps } from '.'
 
 export const searchTool = ({ uiStream, fullResponse }: ToolProps) => ({

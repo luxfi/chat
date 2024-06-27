@@ -5,8 +5,8 @@ import {
   ToolResultPart,
   streamText as nonexperimental_streamText
 } from 'ai'
-import { Section } from '@/components/section'
-import { BotMessage } from '@/components/message'
+import { Section } from '@/components/section/section'
+import { BotMessage } from '@/components/message/message'
 import { getTools } from './tools'
 import { getModel } from '../utils'
 import preprompt from './lux'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChatShare } from './chat-share'
+import { ChatShare } from '../chat/chat-share'
 
 type UserMessageProps = {
   message: string

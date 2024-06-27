@@ -1,11 +1,11 @@
 'use client'
 
 import { SearchSkeleton } from './search-skeleton'
-import { Section } from './section'
+import { Section } from '../section/section'
 import type { SerperSearchResults } from '@/lib/types'
 import { StreamableValue, useStreamableValue } from 'ai/rsc'
 import { VideoSearchResults } from './video-search-results'
-import { ToolBadge } from './tool-badge'
+import { ToolBadge } from '../tool-badge'
 
 export type VideoSearchSectionProps = {
   result?: StreamableValue<string>

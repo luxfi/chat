@@ -2,7 +2,7 @@ import { createStreamableValue } from 'ai/rsc'
 import { searchSchema } from '@/lib/schema/search'
 import { Card } from '@/components/ui/card'
 import { ToolProps } from '.'
-import { VideoSearchSection } from '@/components/video-search-section'
+import { VideoSearchSection } from '@/components/search/video-search-section'
 
 // Start Generation Here
 export const videoSearchTool = ({ uiStream, fullResponse }: ToolProps) => ({

@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from 'react'
 import { PartialInquiry } from '@/lib/schema/inquiry'
-import { Input } from './ui/input'
-import { Checkbox } from './ui/checkbox'
-import { Button } from './ui/button'
-import { Card } from './ui/card'
+import { Input } from '../ui/input'
+import { Checkbox } from '../ui/checkbox'
+import { Button } from '../ui/button'
+import { Card } from '../ui/card'
 import { ArrowRight, Check, FastForward, Sparkles } from 'lucide-react'
 import { useActions, useStreamableValue, useUIState } from 'ai/rsc'
 import type { AI } from '@/app/actions'
-import { IconLogo } from './ui/icons'
+import { IconLogo } from '../ui/icons'
 import { cn } from '@/lib/utils'
 
 export type CopilotProps = {

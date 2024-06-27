@@ -1,9 +1,9 @@
 import { retrieveSchema } from '@/lib/schema/retrieve'
 import { ToolProps } from '.'
 import { Card } from '@/components/ui/card'
-import { SearchSkeleton } from '@/components/search-skeleton'
+import { SearchSkeleton } from '@/components/search/search-skeleton'
 import { SearchResults as SearchResultsType } from '@/lib/types'
-import RetrieveSection from '@/components/retrieve-section'
+import RetrieveSection from '@/components/section/retrieve-section'
 
 export const retrieveTool = ({ uiStream, fullResponse }: ToolProps) => ({
   description: 'Retrieve content from the web',

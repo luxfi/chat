@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { SiFarcaster, SiGithub, SiTwitter } from 'react-icons/si'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 const Footer: React.FC = () => {
   return (

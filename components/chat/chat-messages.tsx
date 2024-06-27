@@ -2,7 +2,7 @@
 
 import { StreamableValue } from 'ai/rsc'
 import type { UIState } from '@/app/actions'
-import { CollapsibleMessage } from './collapsible-message'
+import { CollapsibleMessage } from '../message/collapsible-message'
 
 interface ChatMessagesProps {
   messages: UIState
