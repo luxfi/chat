@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": ["node_modules/@hanzo/ui/tsconfig.json"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
+}

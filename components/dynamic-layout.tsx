@@ -1,9 +1,9 @@
-"use client"
-
+'use client'
 import { useEffect, useState } from 'react'
 import Header from '@/components/header/header'
 import Footer from '@/components/footer/footer'
 import { Sidebar } from '@/components/sidebar'
+import siteDef from '@/site-def'
 
 export default function DynamicLayout({ children }: { children: React.ReactNode }) {
   const [isIframe, setIsIframe] = useState(false)
@@ -16,10 +16,10 @@ export default function DynamicLayout({ children }: { children: React.ReactNode 
 
   return (
     <>
-      {!isIframe && <Header />}
+      {!isIframe && <Header siteDef={siteDef}/>}
       {children}
       <Sidebar />
-      {!isIframe && <Footer />}
+      {!isIframe && <Footer siteDef={siteDef} />}
     </>
   )
 }
