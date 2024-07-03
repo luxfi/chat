@@ -1,7 +1,6 @@
 import React from 'react'
 
 import type { LinkDef } from '../ui/types'
-import type { CommerceConfig }  from '../ui/commerce/types'
 
 import type ChatbotConfig from './chatbot-config'
 
@@ -36,7 +35,6 @@ interface SiteDef {
     */
   aboveCopyright?: LinkDef[] 
 
-  commerce?: CommerceConfig
   chatbot?: ChatbotConfig
 }
 
