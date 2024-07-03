@@ -19,5 +19,5 @@ const VideoPlayer = React.forwardRef<HTMLVideoElement, VideoProps>(
     </video>
   )
 })
-
+VideoPlayer.displayName = 'VideoPlayer'
 export default VideoPlayer
