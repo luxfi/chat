@@ -14,7 +14,6 @@ import { cn } from '@hanzo/ui/util'
 import { formatCurrencyValue } from '../../util'
 import type { LineItem } from '../../types'
 
-import AddToCartWidget from '../add-to-cart-widget'
 
 interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: LineItem
@@ -39,7 +38,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </CardTitle>
     </CardContent>
     <CardFooter className='p-4 flex flex-row justify-center'>
-      <AddToCartWidget item={item} />
     </CardFooter>
   </Card>
 )

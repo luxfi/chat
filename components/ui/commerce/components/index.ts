@@ -1,5 +1,3 @@
-export { default as AddToCartWidget } from './add-to-cart-widget'
-export { default as CarouselBuyCard } from './buy/carousel-buy-card'
 
 export { default as CartPanel } from './cart/cart-panel'
 
