@@ -14,10 +14,6 @@ import {
 import type { LinkDef } from '../ui/types'
 import { cn } from '../ui/util'
 
-import { useAuth } from "../auth/service"
-
-import { Ethereum } from "../auth/icons"
-
 const MobileAuthWidget: React.FC<{
     noLogin?: boolean
     className?: string
@@ -26,15 +22,16 @@ const MobileAuthWidget: React.FC<{
     noLogin = false,
     className
 }) => {
-    const auth = useAuth()
+    // const auth = useAuth()
     const handleLogin = () => {
         window.location.href = "https://lux.id";
       };
 
-    if (!auth) {
-        return null
-    }
-    if (!auth.loggedIn && typeof window !== 'undefined') {
+    // if (!auth) {
+    //     return null
+    // }
+    // !auth.loggedIn && 
+    if (typeof window !== 'undefined') {
         return (noLogin ? null : (
             (handleLogin) ? (
                 <div className="flex items-center py-1 px-1 gap-1">
@@ -74,12 +71,13 @@ const MobileAuthWidget: React.FC<{
                     variant="outline"
                     size='icon'
                     className={cn('rounded-full text-muted border-2 border-muted bg-level-1 hover:bg-level-2 hover:border-foreground hover:text-foreground uppercase w-8 h-8', className)}
-                >{auth.user?.email[0]}</Button>
+                >userEmail</Button>
+                {/* {auth.user?.email[0]} */}
             </PopoverTrigger>
             <PopoverContent className='bg-level-0'>
                 <div className="grid gap-4">
                     <div className="space-y-2 truncate">
-                        {auth.user?.displayName ? (
+                        {/* {auth.user?.displayName ? (
                             <>
                                 <h4 className="font-medium leading-none truncate">{auth.user.displayName}</h4>
                                 <p className="text-sm opacity-50 truncate">{auth.user.email}</p>
@@ -93,10 +91,12 @@ const MobileAuthWidget: React.FC<{
                             <Button variant="outline" className='w-full flex items-center gap-2' onClick={auth.associateWallet.bind(auth)}>
                                 <Ethereum height={20} />Connect your wallet
                             </Button>
-                        )}
+                        )} */}
+                        userName, userWallet
                     </div>
                     <Separator />
-                    <Button variant="outline" onClick={auth.logout.bind(auth)}>Logout</Button>
+                    <Button variant="outline" >Logout</Button>
+                    {/* onClick={auth.logout.bind(auth)} */}
                 </div>
             </PopoverContent>
         </Popover>

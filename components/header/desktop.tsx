@@ -28,7 +28,7 @@ const DesktopHeader: React.FC<{
         {/* md or larger */}
         <div className={
           'flex flex-row h-[80px] items-center justify-between ' +
-          'mx-[24px] w-full max-w-screen'
+          'mx-[24px] w-full max-w-screen bg-background'
         }>
           <Logo size='md' href='/' outerClx='hidden lg:flex' key='two' variant='text-only' />
           <Logo size='sm' href='/' outerClx='hidden md:flex lg:hidden' key='one' variant='text-only' />

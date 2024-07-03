@@ -26,6 +26,8 @@
     --ring: 240 5% 64.9%;
     --radius: 0.5rem;
     --hz-ui-fg-0: #000;
+    --hz-ui-primary-fg: hsl(0 0% 100%);
+    --hz-ui-fg-5: hsl(0deg 3.88% 59.61%);
 
   }
   .dark {
@@ -49,6 +51,9 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
     --hz-ui-bg-1:#1f1f1f;
+    --hz-ui-primary-fg: hsl(0deg 0% 0%);
+    --hz-ui-fg-5: hsl(0 0% 25%);
+    
   }
 }
 
@@ -114,4 +119,19 @@ div.nextjs-toast-errors-parent[data-nextjs-toast="true"] {
 }
 .overflow-scroll::-webkit-scrollbar{
   display:none;
+}
+
+.text-primary-fg {
+  color: var(--hz-ui-primary-fg);
+}
+.border-muted-4 {
+  border-color: var(--hz-ui-fg-5);
+}
+
+
+.messages-container {
+  max-height: 100vh; /* Adjust based on your layout */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }

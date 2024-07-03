@@ -36,7 +36,7 @@ export const Header: React.FC<{
           currentAs={currentAs}
         />
         <MobileHeader
-          className={cn(className, 'md:hidden')}
+          className={cn(className, 'md:hidden z-10')}
           links={links}
           currentAs={currentAs}
           setChatbotOpen={setOpen}

@@ -20,6 +20,7 @@ const MobileNav: React.FC<{
   setMenuState: (arg: 'closed' | 'nav' | 'login' | 'bag') => void
 }> = ({
   currentAs,
+  setMenuState,
   links,
   className = '',
   commonItemClx,
@@ -35,7 +36,7 @@ const MobileNav: React.FC<{
               const itemClx = (commonItemClx) ? (typeof commonItemClx === 'string' ? commonItemClx : commonItemClx(el)) : ''
               const variant = el.variant ?? 'link'
               let internalClx = variant === 'link'
-                ? ' text-muted hover:text-foreground active:text-accent rounded-none'
+                ? ' text-muted-foreground hover:text-foreground active:text-accent rounded-none'
                 : ' min-w-0'
 
               if (currentAs && currentAs === el.href) {
