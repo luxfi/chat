@@ -48,13 +48,13 @@ const DesktopNav: React.FC<{
     }
   };
 
-  const handleMouseEnter = React.useCallback(() => {
+  const handleMouseEnter = () => {
     setIsMenuOpen(true);
-  }, [setIsMenuOpen]);
+  };
 
-  const handleMouseLeave = React.useCallback(() => {
+  const handleMouseLeave = () => {
     setIsMenuOpen(false);
-  }, [setIsMenuOpen]);
+  };
 
   const menuHiddenClass = !isMenuOpened ? "invisible" : "";
 
@@ -169,13 +169,12 @@ const GroupChildMenu = (params: { childs: ChildMenu[] | undefined, isCards?: boo
     return grouped;
   }, {});
 
-  const getChildExtraClass = React.useCallback((index: number) => {
-    if (isCards)
-      if (isCards && (index === 3 || index === 4)) {
-        return "xl:-mt-32"
-      }
+  const getChildExtraClass = (index: number) => {
+    if (isCards && (index === 3 || index === 4)) {
+      return "xl:-mt-32"
+    }
     return ""
-  }, [isCards]);
+  };
 
   return Object.entries(groupedChildMenus).map(([groupName, childLinks], index) => (
     <div key={groupName} className={cn("py-4 px-4 ", getChildExtraClass(index))}>
