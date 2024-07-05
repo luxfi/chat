@@ -43,6 +43,8 @@
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
+    --muted-1: 0 0% 70%;
+    --muted-1-foreground: 0 0% 70%;
     --accent: #fff;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;

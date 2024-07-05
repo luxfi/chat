@@ -2,7 +2,8 @@ import type { LinkDef } from '../../ui/types'
 import { SocialIcon } from '../../icons'
 
 // @ts-ignore (will build in project that has @svgr support)
-import {ReactComponent as SVG_warp_logo} from './svg/warpcast-logo.svg'
+import { ReactComponent as SVG_warp_logo } from './svg/warpcast-logo.svg'
+import Warpcastlogo from './svg/warpcastlogo'
 
 const SOC_ICON_SIZE = 18
 
@@ -16,7 +17,8 @@ export default [
   {
     title: 'Lux Channel',
     href: 'https://warpcast.com/~/channel/lux',
-    icon: <SocialIcon network='warpcast' size={SOC_ICON_SIZE} />
+    icon: <Warpcastlogo />
+    // icon: <SocialIcon network='warpcast' size={SOC_ICON_SIZE} />
   },
   {
     title: 'Lux Discussions',
