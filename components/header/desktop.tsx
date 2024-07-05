@@ -20,25 +20,27 @@ const DesktopHeader: React.FC<{
   links,
   className = ''
 }) => {
+    const [isMenuOpened, setIsMenuOpen] = React.useState(false);
+    const opendMenuClass = isMenuOpened ? " h-full" : ""
 
     // TODO move 13px into a size class and configure twMerge to recognize say, 'text-size-nav' 
     // (vs be beat out by 'text-color-nav')
     return (
-      <header className={cn('fixed w-full p-1 md:p-2 flex justify-between h-[80px] pl-[24px] items-center z-10 backdrop-blur md:backdrop-blur-none bg-background/80 md:bg-transparent', className)} >
+      <header className={cn(' z-10 bg-[rgba(0, 0, 0, 0.5)] !backdrop-blur-3xl fixed z-header top-0 left-0 right-0', className, opendMenuClass)} >
         {/* md or larger */}
         <div className={
           'flex flex-row h-[80px] items-center justify-between ' +
-          'mx-[24px] w-full max-w-screen bg-background'
+          'mx-[24px] w-full max-w-screen'
         }>
           <Logo size='md' href='/' outerClx='hidden lg:flex' key='two' variant='text-only' />
           <Logo size='sm' href='/' outerClx='hidden md:flex lg:hidden' key='one' variant='text-only' />
           {/* md or larger */}
-          <div className='flex w-full gap-4 items-center justify-between lg:ml-20'>
-            <DesktopNav links={links} />
-            <div className="flex gap-0.5">
-              <ModeToggle />
-              <HistoryContainer location="header" />
-            </div>
+          <div className='flex w-full gap-4 items-center justify-center'>
+            <DesktopNav links={links} isMenuOpened={isMenuOpened} setIsMenuOpen={setIsMenuOpen} />
+          </div>
+          <div className="flex gap-0.5">
+            <ModeToggle />
+            <HistoryContainer location="header" />
           </div>
         </div>
       </header>
