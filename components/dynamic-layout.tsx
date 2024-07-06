@@ -16,10 +16,10 @@ export default function DynamicLayout({ children }: { children: React.ReactNode 
 
   return (
     <>
-      {!isIframe && <Header siteDef={siteDef}/>}
+      {!isIframe && <Header siteDef={siteDef} />}
       {children}
       <Sidebar />
-      {!isIframe && <Footer siteDef={siteDef} />}
+      {/* {!isIframe && <Footer siteDef={siteDef} />} */}
     </>
   )
 }

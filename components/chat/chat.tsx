@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChatPanel } from './chat-panel'
 import { ChatMessages } from './chat-messages'
@@ -16,30 +16,60 @@ export function Chat({ id }: ChatProps) {
   const [messages] = useUIState()
   const [aiState] = useAIState()
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true)
+
+  useEffect(() => {
+    let heightCheckInterval = setInterval(() => {
+      if (containerRef.current) {
+        setContainerHeight(containerRef.current.offsetHeight);
+      }
+    }, 100);
+    return () => {
+      clearInterval(heightCheckInterval);
+    }
+  }, []);
 
   useEffect(() => {
     if (!path.includes('search') && messages.length === 1) {
       window.history.replaceState({}, '', `/search/${id}`)
     }
-
-    if (messages.length && scrollerRef.current) {
-      console.log("Scrolling to bottom with:", scrollerRef.current, messages);
-      scrollerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
   }, [id, path, messages])
 
   useEffect(() => {
+    setAutoScroll(true);
+  }, [messages]);
+
+  useEffect(() => {
     if (aiState.messages[aiState.messages.length - 1]?.type === 'followup') {
-      // Refresh the page to reflect chat history updates
       router.refresh()
     }
   }, [aiState, router])
 
+  useEffect(() => {
+    if (autoScroll && scrollerRef.current) {
+      scrollerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [containerHeight, autoScroll]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setAutoScroll(false)
+    }
+
+    window.addEventListener('wheel', handleScroll, { passive: false })
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll)
+    }
+  }, [])
+
   return (
-    <div className="h-[100] min-h-screen overflow-scroll px-8 sm:px-12 pt-12 md:pt-14 pb-14 md:pb-24 max-w-3xl mx-auto flex flex-col space-y-3 md:space-y-4">
+    <div ref={containerRef} className="min-h-[calc(100vh-80px)] mt-[80px] overflow-x-hidden px-8 sm:px-12 pt-12 md:pt-14 pb-14 md:pb-24 max-w-3xl mx-auto flex flex-col space-y-3 md:space-y-4">
       <ChatMessages messages={messages} />
       <ChatPanel messages={messages} />
-      <div className="" ref={scrollerRef}></div>
+      <div ref={scrollerRef}></div>
     </div>
   )
 }
