@@ -163,7 +163,7 @@ export function ChatPanel({ messages }: ChatPanelProps) {
       </div> :
       <div
         className={
-          'w-full mx-auto h-full flex flex-col items-center justify-center'
+          'w-full mx-auto h-full flex flex-col items-center justify-center my-auto'
         }
       >
         <form onSubmit={handleSubmit} className="max-w-2xl w-full px-6">
