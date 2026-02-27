@@ -1,9 +1,11 @@
 import { footer, mainNav, type SiteDef  } from '@/components/site-def'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lux.chat'
+
 export default {
-  currentAs: 'https://lux.chat',
+  currentAs: siteUrl,
   nav: {
     common: mainNav,
   },
-  footer: footer.standard, 
+  footer: footer.standard,
 } satisfies SiteDef

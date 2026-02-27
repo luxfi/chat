@@ -15,6 +15,9 @@ import { writer } from '@/lib/agents/writer'
 import { saveChat } from '@/lib/actions/chat'
 import { Chat } from '@/lib/types'
 import { AIMessage } from '@/lib/types'
+import { getUserId } from '@/lib/auth-session'
+import { checkUserCredits, deductCredit } from '@/lib/billing'
+import { UpgradePrompt } from '@/components/billing/upgrade-prompt'
 import { UserMessage } from '@/components/message/user-message'
 import { BotMessage } from '@/components/message/message'
 import { SearchSection } from '@/components/search/search-section'
@@ -47,14 +50,15 @@ async function submit(formData?: FormData, skip?: boolean) {
   // goupeiId is used to group the messages for collapse
   const groupeId = nanoid()
 
-  const useSpecificAPI = process.env.USE_SPECIFIC_API_FOR_WRITER === 'true'
+  const useSpecificAPI = process.env.WRITER_MODEL ? true : false
   const maxMessages = useSpecificAPI ? 5 : 10
   // Limit the number of messages to the maximum
   messages.splice(0, Math.max(messages.length - maxMessages, 0))
-  // Get the user input from the form data
+  // Get the user input and model selection from the form data
   const userInput = skip
     ? `{"action": "skip"}`
     : (formData?.get('input') as string)
+  const selectedModel = formData?.get('model') as string | undefined
 
   const content = skip
     ? userInput
@@ -90,6 +94,20 @@ async function submit(formData?: FormData, skip?: boolean) {
   }
 
   async function processEvents() {
+    // Check billing credits
+    const billingUserId = await getUserId()
+    const credits = await checkUserCredits(billingUserId)
+    if (!credits.allowed) {
+      uiStream.update(
+        <UpgradePrompt remaining={credits.remaining} limit={credits.limit} />
+      )
+      uiStream.done()
+      isGenerating.done(false)
+      isCollapsed.done(false)
+      aiState.done(aiState.get())
+      return
+    }
+
     let action = { object: { next: 'proceed' } }
     // If the user skips the task, we proceed to the search
     if (!skip) action = (await taskManager(messages)) ?? action
@@ -136,7 +154,8 @@ async function submit(formData?: FormData, skip?: boolean) {
         uiStream,
         streamText,
         messages,
-        useSpecificAPI
+        useSpecificAPI,
+        selectedModel
       )
       answer = fullResponse
       toolOutputs = toolResponses
@@ -181,6 +200,9 @@ async function submit(formData?: FormData, skip?: boolean) {
     }
 
     if (!errorOccurred) {
+      // Deduct billing credit
+      await deductCredit(billingUserId)
+
       // Generate related queries
       const relatedQueries = await querySuggestor(uiStream, messages)
       // Add follow-up panel
@@ -282,7 +304,7 @@ export const AI = createAI<AIState, UIState>({
 
     const { chatId, messages } = state
     const createdAt = new Date()
-    const userId = 'anonymous'
+    const userId = await getUserId()
     const path = `/search/${chatId}`
     const title =
       messages.length > 0

@@ -11,13 +11,17 @@ import { ArrowRight, Plus } from 'lucide-react'
 import { EmptyScreen } from '../empty-screen'
 import Textarea from 'react-textarea-autosize'
 import { nanoid } from 'ai'
+import { ModelSelector } from './model-selector'
 
 interface ChatPanelProps {
   messages: UIState
 }
 
+const DEFAULT_MODEL = process.env.NEXT_PUBLIC_DEFAULT_MODEL || 'zen4-mini'
+
 export function ChatPanel({ messages }: ChatPanelProps) {
   const [input, setInput] = useState('')
+  const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL)
   const [, setMessages] = useUIState<typeof AI>()
   const { submit } = useActions()
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -45,6 +49,7 @@ export function ChatPanel({ messages }: ChatPanelProps) {
 
     // Submit and get response message
     const formData = new FormData(e.currentTarget)
+    formData.set('model', selectedModel)
     const responseMessage = await submit(formData)
     setMessages(currentMessages => [...currentMessages, responseMessage])
   }
@@ -162,6 +167,9 @@ export function ChatPanel({ messages }: ChatPanelProps) {
         }
       >
         <form onSubmit={handleSubmit} className="max-w-2xl w-full px-6">
+          <div className="flex justify-end mb-2">
+            <ModelSelector value={selectedModel} onChange={setSelectedModel} />
+          </div>
           <div className="relative flex items-center w-full">
             <Textarea
               ref={inputRef}

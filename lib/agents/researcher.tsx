@@ -15,7 +15,8 @@ export async function researcher(
   uiStream: ReturnType<typeof createStreamableUI>,
   streamText: ReturnType<typeof createStreamableValue<string>>,
   messages: CoreMessage[],
-  useSpecificModel?: boolean
+  useSpecificModel?: boolean,
+  modelId?: string
 ) {
   let fullResponse = ''
   let hasError = false
@@ -27,7 +28,7 @@ export async function researcher(
 
   const currentDate = new Date().toLocaleString()
   const result = await nonexperimental_streamText({
-    model: getModel(),
+    model: getModel(modelId),
     maxTokens: 2500,
     system: preprompt+`\nAs a professional search expert, you possess the ability to search for any information on the web.
     or any information on the web.

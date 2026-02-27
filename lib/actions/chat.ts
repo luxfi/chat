@@ -3,12 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { type Chat } from '@/lib/types'
-import { Redis } from '@upstash/redis'
-
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || ''
-})
+import kv from '@/lib/kv'
 
 export async function getChats(userId?: string | null) {
   if (!userId) {
@@ -16,27 +11,26 @@ export async function getChats(userId?: string | null) {
   }
 
   try {
-    const pipeline = redis.pipeline()
-    const chats: string[] = await redis.zrange(`user:chat:${userId}`, 0, -1, {
-      rev: true
-    })
+    const chats: string[] = await kv.zrange(`user:chat:${userId}`, 0, '-1', 'REV')
 
+    const pipeline = kv.pipeline()
     for (const chat of chats) {
       pipeline.hgetall(chat)
     }
 
     const results = await pipeline.exec()
+    if (!results) return []
 
-    return results as Chat[]
+    return results.map(([err, data]: [Error | null, unknown]) => data).filter(Boolean) as Chat[]
   } catch (error) {
     return []
   }
 }
 
 export async function getChat(id: string, userId: string = 'anonymous') {
-  const chat = await redis.hgetall<Chat>(`chat:${id}`)
+  const chat = await kv.hgetall(`chat:${id}`) as Chat | null
 
-  if (!chat) {
+  if (!chat || !chat.id) {
     return null
   }
 
@@ -46,11 +40,11 @@ export async function getChat(id: string, userId: string = 'anonymous') {
 export async function clearChats(
   userId: string = 'anonymous'
 ): Promise<{ error?: string }> {
-  const chats: string[] = await redis.zrange(`user:chat:${userId}`, 0, -1)
+  const chats: string[] = await kv.zrange(`user:chat:${userId}`, 0, '-1')
   if (!chats.length) {
     return { error: 'No chats to clear' }
   }
-  const pipeline = redis.pipeline()
+  const pipeline = kv.pipeline()
 
   for (const chat of chats) {
     pipeline.del(chat)
@@ -64,17 +58,14 @@ export async function clearChats(
 }
 
 export async function saveChat(chat: Chat, userId: string = 'anonymous') {
-  const pipeline = redis.pipeline()
-  pipeline.hmset(`chat:${chat.id}`, chat)
-  pipeline.zadd(`user:chat:${chat.userId}`, {
-    score: Date.now(),
-    member: `chat:${chat.id}`
-  })
+  const pipeline = kv.pipeline()
+  pipeline.hmset(`chat:${chat.id}`, chat as any)
+  pipeline.zadd(`user:chat:${chat.userId}`, Date.now(), `chat:${chat.id}`)
   await pipeline.exec()
 }
 
 export async function getSharedChat(id: string) {
-  const chat = await redis.hgetall<Chat>(`chat:${id}`)
+  const chat = await kv.hgetall(`chat:${id}`) as Chat | null
 
   if (!chat || !chat.sharePath) {
     return null
@@ -84,7 +75,7 @@ export async function getSharedChat(id: string) {
 }
 
 export async function shareChat(id: string, userId: string = 'anonymous') {
-  const chat = await redis.hgetall<Chat>(`chat:${id}`)
+  const chat = await kv.hgetall(`chat:${id}`) as Chat | null
 
   if (!chat || chat.userId !== userId) {
     return null
@@ -95,7 +86,7 @@ export async function shareChat(id: string, userId: string = 'anonymous') {
     sharePath: `/share/${id}`
   }
 
-  await redis.hmset(`chat:${id}`, payload)
+  await kv.hmset(`chat:${id}`, payload as any)
 
   return payload
 }

@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: hanzoai/kv-client
+          path: kv-client
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # Build kv-client so the file: reference works
+      - run: cd kv-client && npm install && npm run build
+      - run: |
+          sed -i 's|file:../../hanzo/kv-client|file:./kv-client|' package.json
+          pnpm install --no-frozen-lockfile
+
+      - run: pnpm build
+        env:
+          HANZO_API_KEY: build-placeholder
+          KV_HOST: localhost
+          NEXT_PUBLIC_SITE_NAME: Lux
+          NEXT_PUBLIC_SITE_URL: https://lux.chat
+          NEXT_PUBLIC_DEFAULT_MODEL: zen4-mini
+          NEXT_PUBLIC_LUX_IAM_URL: https://lux.id
+          NEXT_PUBLIC_LUX_IAM_CLIENT_ID: lux-chat-client-id
+          NEXT_PUBLIC_HANZO_IAM_URL: https://hanzo.id
+          NEXT_PUBLIC_HANZO_IAM_CLIENT_ID: hanzo-chat-client-id
+
+  docker:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/luxfi/chat:latest
+            ghcr.io/luxfi/chat:${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_SITE_NAME=Lux
+            NEXT_PUBLIC_SITE_URL=https://lux.chat
+            NEXT_PUBLIC_DEFAULT_MODEL=zen4-mini
+            NEXT_PUBLIC_LUX_IAM_URL=https://lux.id
+            NEXT_PUBLIC_LUX_IAM_CLIENT_ID=lux-chat-client-id
+            NEXT_PUBLIC_HANZO_IAM_URL=https://hanzo.id
+            NEXT_PUBLIC_HANZO_IAM_CLIENT_ID=hanzo-chat-client-id

@@ -11,12 +11,14 @@ const fontSans = FontSans({
   variable: '--font-sans'
 })
 
-const title = 'Lux'
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Lux'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lux.chat'
+const title = siteName
 const description =
-  'Lux AI is a fully open-source AI-powered answer engine and interface to DeFi with a generative UI.'
+  `${siteName} AI — search engine powered by Zen models with 433+ AI models via the Hanzo AI platform.`
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lux.chat'),
+  metadataBase: new URL(siteUrl),
   title,
   description,
   openGraph: {

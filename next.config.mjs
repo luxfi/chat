@@ -6,12 +6,13 @@ const mdx = withMDX({
 });
 
 const nextConfig = {
+  output: 'standalone',
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   reactStrictMode: true,
   transpilePackages: [
-    '@hanzo/ui', 
-    '@hanzo/auth', 
-    '@hanzo/commerce', 
+    '@hanzo/ui',
+    '@hanzo/auth',
+    '@hanzo/commerce',
     '@luxfi/core',
     '@luxfi/data'
   ],

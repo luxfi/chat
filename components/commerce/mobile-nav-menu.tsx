@@ -94,7 +94,7 @@ const MobileNav: React.FC<{
             })}
           </Accordion>
         </div>
-        <MobileAuthWidget className='text-2xl z-10' handleLogin={() => { setMenuState('login') }} />
+        <MobileAuthWidget className='text-2xl z-10' />
       </div>
     ) : null
   );
