@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const publicPaths = ['/', '/share', '/iframe', '/auth/callback', '/api/models']
+const publicPaths = ['/', '/share', '/iframe', '/auth/callback']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

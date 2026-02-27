@@ -53,7 +53,7 @@ export function ModelSelector({
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    fetch('/api/models')
+    fetch('https://api.hanzo.ai/v1/models')
       .then(r => r.json())
       .then((data: { data?: ModelInfo[] }) => {
         if (data?.data) {
