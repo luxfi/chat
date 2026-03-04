@@ -97,7 +97,7 @@ export function getAuthorizationUrl(provider: IAMProvider): string {
     state,
   })
 
-  return `${IAM_URLS[provider]}/login/oauth/authorize?${params.toString()}`
+  return `${IAM_URLS[provider]}/oauth/authorize?${params.toString()}`
 }
 
 /** Exchange authorization code for tokens */
