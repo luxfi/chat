@@ -33,26 +33,26 @@ export function ChatPage() {
   const auth = getStoredAuthState()
   const userId = auth.user?.sub || 'anonymous'
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, append, isLoading } = useChat({
     id: chatId,
     api: getChatApiUrl(),
     body: { model: selectedModel, userId },
     onError: (err: Error) => {
       console.error('chat error:', err)
     },
-    onFinish: async ({ message }: { message: UIMessage }) => {
+    onFinish: async (message) => {
       // Persist chat history (fire and forget)
       saveChat({
         id: chatId,
         userId,
-        title: firstUserText(messages) || 'Untitled',
-        messages: [...messages, message],
+        title: firstUserText(messages as UIMessage[]) || 'Untitled',
+        messages: [...(messages as UIMessage[]), message as unknown as UIMessage],
         createdAt: new Date().toISOString(),
       }).catch(() => {})
     },
   })
 
-  const isGenerating = status === 'streaming' || status === 'submitted'
+  const isGenerating = isLoading
   const isIframe = typeof window !== 'undefined' && window.location.pathname === '/iframe'
 
   // Update URL once we have a first exchange
@@ -79,7 +79,7 @@ export function ChatPage() {
     const text = input
     setInput('')
     setShowEmptyScreen(false)
-    sendMessage({ text })
+    append({ role: 'user', content: text })
     deductCredit(userId).catch(() => {})
   }
 
