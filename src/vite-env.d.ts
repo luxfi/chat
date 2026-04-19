@@ -1,0 +1,16 @@
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_CHAT_API_URL?: string
+  readonly VITE_API_BASE?: string
+  readonly VITE_DEFAULT_MODEL?: string
+  readonly VITE_LUX_IAM_URL?: string
+  readonly VITE_LUX_IAM_CLIENT_ID?: string
+  readonly VITE_HANZO_IAM_URL?: string
+  readonly VITE_HANZO_IAM_CLIENT_ID?: string
+  readonly VITE_FREE_DAILY_QUERIES?: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}

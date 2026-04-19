@@ -1,25 +1,22 @@
 /**
- * Hanzo IAM OAuth2/OIDC Client — adapted for lux.chat
- * Supports lux.id + hanzo.id (same Casdoor backend, different orgs)
+ * Hanzo IAM OAuth2/OIDC Client — pure client-side for Vite SPA.
+ * Supports lux.id + hanzo.id (same Casdoor backend, different orgs).
  */
 
 export type IAMProvider = 'lux' | 'hanzo'
 
 const IAM_URLS: Record<IAMProvider, string> = {
-  lux: process.env.NEXT_PUBLIC_LUX_IAM_URL || 'https://lux.id',
-  hanzo: process.env.NEXT_PUBLIC_HANZO_IAM_URL || 'https://hanzo.id',
+  lux: (import.meta.env.VITE_LUX_IAM_URL as string) || 'https://lux.id',
+  hanzo: (import.meta.env.VITE_HANZO_IAM_URL as string) || 'https://hanzo.id',
 }
 
 const CLIENT_IDS: Record<IAMProvider, string> = {
-  lux: process.env.NEXT_PUBLIC_LUX_IAM_CLIENT_ID || process.env.LUX_IAM_CLIENT_ID || '',
-  hanzo: process.env.NEXT_PUBLIC_HANZO_IAM_CLIENT_ID || process.env.HANZO_IAM_CLIENT_ID || '',
+  lux: (import.meta.env.VITE_LUX_IAM_CLIENT_ID as string) || '',
+  hanzo: (import.meta.env.VITE_HANZO_IAM_CLIENT_ID as string) || '',
 }
 
 function getRedirectUri(): string {
-  if (typeof window !== 'undefined') {
-    return `${window.location.origin}/auth/callback`
-  }
-  return `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`
+  return `${window.location.origin}/auth/callback`
 }
 
 export interface IAMUser {
@@ -67,23 +64,9 @@ const STORAGE_KEYS = {
 function generateState(): string {
   const array = new Uint8Array(32)
   crypto.getRandomValues(array)
-  return Array.from(array, b => b.toString(16).padStart(2, '0')).join('')
+  return Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('')
 }
 
-function parseJwt(token: string): Record<string, unknown> {
-  try {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(
-      atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
-    )
-    return JSON.parse(jsonPayload)
-  } catch {
-    return {}
-  }
-}
-
-/** Build OAuth2 authorization URL for the given provider */
 export function getAuthorizationUrl(provider: IAMProvider): string {
   const state = generateState()
   sessionStorage.setItem(STORAGE_KEYS.OAUTH_STATE, state)
@@ -96,11 +79,9 @@ export function getAuthorizationUrl(provider: IAMProvider): string {
     scope: 'openid profile email',
     state,
   })
-
   return `${IAM_URLS[provider]}/oauth/authorize?${params.toString()}`
 }
 
-/** Exchange authorization code for tokens */
 export async function exchangeCode(code: string, provider: IAMProvider): Promise<TokenResponse> {
   const res = await fetch(`${IAM_URLS[provider]}/oauth/token`, {
     method: 'POST',
@@ -116,7 +97,6 @@ export async function exchangeCode(code: string, provider: IAMProvider): Promise
   return res.json()
 }
 
-/** Get user info from IAM */
 export async function getUserInfo(accessToken: string, provider: IAMProvider): Promise<IAMUser> {
   const res = await fetch(`${IAM_URLS[provider]}/oauth/userinfo`, {
     headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' },
@@ -126,13 +106,14 @@ export async function getUserInfo(accessToken: string, provider: IAMProvider): P
   return { ...info, provider }
 }
 
-/** Handle OAuth callback — verify state, exchange code, fetch user */
-export async function handleOAuthCallback(code: string, state: string): Promise<{ tokens: TokenResponse; user: IAMUser }> {
+export async function handleOAuthCallback(
+  code: string,
+  state: string,
+): Promise<{ tokens: TokenResponse; user: IAMUser }> {
   const storedState = sessionStorage.getItem(STORAGE_KEYS.OAUTH_STATE)
   const provider = (sessionStorage.getItem(STORAGE_KEYS.OAUTH_PROVIDER) || 'lux') as IAMProvider
   sessionStorage.removeItem(STORAGE_KEYS.OAUTH_STATE)
   sessionStorage.removeItem(STORAGE_KEYS.OAUTH_PROVIDER)
-
   if (state !== storedState) throw new Error('Invalid OAuth state')
 
   const tokens = await exchangeCode(code, provider)
@@ -141,7 +122,6 @@ export async function handleOAuthCallback(code: string, state: string): Promise<
   return { tokens, user }
 }
 
-/** Refresh access token */
 export async function refreshAccessToken(refreshToken: string, provider: IAMProvider): Promise<TokenResponse> {
   const res = await fetch(`${IAM_URLS[provider]}/oauth/token`, {
     method: 'POST',
@@ -156,9 +136,7 @@ export async function refreshAccessToken(refreshToken: string, provider: IAMProv
   return res.json()
 }
 
-/** Store auth state to localStorage */
 export function storeAuthState(tokens: TokenResponse, user: IAMUser): void {
-  if (typeof window === 'undefined') return
   localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.access_token)
   localStorage.setItem(STORAGE_KEYS.EXPIRES_AT, (Date.now() + tokens.expires_in * 1000).toString())
   localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user))
@@ -166,37 +144,37 @@ export function storeAuthState(tokens: TokenResponse, user: IAMUser): void {
   if (tokens.id_token) localStorage.setItem(STORAGE_KEYS.ID_TOKEN, tokens.id_token)
 }
 
-/** Get stored auth state */
 export function getStoredAuthState(): AuthState {
-  if (typeof window === 'undefined') {
-    return { user: null, accessToken: null, refreshToken: null, expiresAt: null, isAuthenticated: false, isLoading: false }
-  }
   try {
     const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
     const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)
     const userStr = localStorage.getItem(STORAGE_KEYS.USER)
     const expiresAtStr = localStorage.getItem(STORAGE_KEYS.EXPIRES_AT)
-    const user = userStr ? JSON.parse(userStr) : null
+    const user = userStr ? (JSON.parse(userStr) as IAMUser) : null
     const expiresAt = expiresAtStr ? parseInt(expiresAtStr, 10) : null
     const isExpired = expiresAt ? Date.now() > expiresAt : true
-    return { user, accessToken, refreshToken, expiresAt, isAuthenticated: !!accessToken && !isExpired, isLoading: false }
+    return {
+      user,
+      accessToken,
+      refreshToken,
+      expiresAt,
+      isAuthenticated: !!accessToken && !isExpired,
+      isLoading: false,
+    }
   } catch {
     return { user: null, accessToken: null, refreshToken: null, expiresAt: null, isAuthenticated: false, isLoading: false }
   }
 }
 
-/** Clear auth state */
 export function clearAuthState(): void {
-  if (typeof window === 'undefined') return
-  Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key))
+  Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key))
 }
 
-/** Logout — revoke + clear */
 export async function logout(): Promise<void> {
   const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
   const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)
   const userStr = localStorage.getItem(STORAGE_KEYS.USER)
-  const provider: IAMProvider = userStr ? (JSON.parse(userStr).provider || 'lux') : 'lux'
+  const provider: IAMProvider = userStr ? ((JSON.parse(userStr) as IAMUser).provider || 'lux') : 'lux'
 
   if (accessToken || refreshToken) {
     try {
@@ -209,19 +187,13 @@ export async function logout(): Promise<void> {
           token_type_hint: refreshToken ? 'refresh_token' : 'access_token',
         }),
       })
-    } catch { /* best effort */ }
+    } catch {
+      /* best effort */
+    }
   }
   clearAuthState()
 }
 
-/** Server-side: validate token and get user ID from cookie/header */
-export async function validateServerToken(accessToken: string): Promise<IAMUser | null> {
-  // Try lux.id first, then hanzo.id
-  for (const provider of ['lux', 'hanzo'] as IAMProvider[]) {
-    try {
-      const user = await getUserInfo(accessToken, provider)
-      if (user?.sub) return user
-    } catch { /* try next */ }
-  }
-  return null
+export function getAccessToken(): string | null {
+  return localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
 }
